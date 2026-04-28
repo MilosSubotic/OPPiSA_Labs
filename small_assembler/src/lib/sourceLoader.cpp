@@ -2,6 +2,8 @@
 
 #include "assemblerLib.h"
 
+#include <cstring>
+
 using namespace std;
 
 
@@ -19,7 +21,7 @@ void inFileOpenError(string filename) {
 	if (!filename.empty())
 		printf("Error: Could not open input file (%s) for reading.\n", filename.c_str());
 	else
-		printf("Error: Input file name not defined.\n", filename.c_str());
+		printf("Error: Input file name not defined.\n");
 }
 
 void sourceListPushBack(SourceList& sourceList, const char* sourceLine, long lineNumber) {
@@ -128,7 +130,7 @@ bool loadSourceRepPseudo(string input_file){
     lineNum = 1;
 
     while(buffPos < buffLen){
-        ret = sscanf_s(buffer+buffPos,"%[^\r\n]", mem2, buffLen);
+        ret = sscanf(buffer+buffPos,"%[^\r\n]", mem2, buffLen);
         if(ret==1){ // skip empty lines
             if(!(getCommand(op1,mem2))){
                 op = mem1;

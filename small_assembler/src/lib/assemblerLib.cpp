@@ -4,12 +4,24 @@
 #include <cstdio>
 #include <cstdlib>
 
+#include <fcntl.h>
+#include <unistd.h>
+
 #include "writeElf.h"
 #include "registersSet.h"
 
 
 using namespace std;
 
+
+#include <ctype.h>
+#include <string.h>
+char* strlwr(char* s) {
+    for (int i = 0; s[i]; i++) {
+        s[i] = tolower((unsigned char)s[i]);
+    }
+    return s;
+}
 
 
 /**
@@ -204,7 +216,7 @@ long toint(const char* string, bool &isNum){
     stringCopy = (char*)malloc((strlen(string)+1)*sizeof(char));
     strcpy(stringCopy, string);
 
-    char* lower = _strlwr(stringCopy);
+    char* lower = strlwr(stringCopy);
     
     if(lower[0]=='0' && lower[1]=='x'){
         val = strtoul(lower+2, &end, 16);
@@ -295,7 +307,7 @@ bool getCommand(string &cmd, string line) {
     if(strlen(command) && command[0]!=DIRECTIVE){         // Skip lines with nothing on... or starting with .
         command[strcspn(command, OPSEP)] = 0;             // throw everything after first op
         command[strcspn(command, COMMAND_SEP)] = 0;       // throw everything after command
-        _strlwr(command);
+        strlwr(command);
 		cmd.assign(command);
 		delete[] freeCommand;
         return true;
@@ -424,7 +436,7 @@ bool getParams(ParamStack &params, string line, long lineNumber, bool chopDollar
         // special case for lw and sw instructions with a 100($1) parameter...
         memoryOp2 = param + strcspn(param, OPSEP);        // drop first operand
         memoryOp2 += strspn(memoryOp2, OPSEP);
-        if( sscanf_s(memoryOp2, "%d($%[^)])", &addr, offset, strlen(param)+1) == 2 ){
+        if( sscanf(memoryOp2, "%d($%[^)])", &addr, offset, strlen(param)+1) == 2 ){
             memoryOp2 = (char*) malloc((strlen(param)+1)*sizeof(char));
             memoryOp2new = (char*) malloc((strlen(param)+1)*sizeof(char));
             
@@ -525,7 +537,7 @@ void exprCalc(char* &expr, long lineNumber, const char* line, long location) {
     if(strlen(expr)){                                  // Skip lines with nothing on
         operand = (char*) malloc((strlen(expr)+1)*sizeof(char));
         rest    = (char*) malloc((strlen(expr)+1)*sizeof(char));
-        if( sscanf_s(expr, "%[^(](%[^)])", operand, strlen(expr)+1, rest, strlen(expr)+1) == 2 ){
+        if( sscanf(expr, "%[^(](%[^)])", operand, strlen(expr)+1, rest, strlen(expr)+1) == 2 ){
             operand += strspn(operand, WHITESPACE);   // eat whitespaces
             pos = strrspn(operand, WHITESPACE);       // trim trailing whitespaces
             pos[0] = 0;
@@ -1354,7 +1366,7 @@ int writeElf(string outFileName)
 		if (elf_version(EV_CURRENT) == EV_NONE) // It must appear before "elf_begin()"
 			errx(EX_SOFTWARE, "ELF library initialization failed: %s", elf_errmsg(-1));
 
-		if ((FileDes = open(outFileName.c_str(), O_CREAT | O_WRONLY | O_TRUNC | O_BINARY, 0777)) < 0)
+		if ((FileDes = open(outFileName.c_str(), O_CREAT | O_WRONLY | O_TRUNC, 0777)) < 0)
 			errx(EX_OSERR, "open \"%s\" failed", outFileName.c_str());
 
 		if ((pElf = elf_begin(FileDes, ELF_C_WRITE, NULL)) == NULL)  // 3rd argument is ignored for "ELF_C_WRITE"

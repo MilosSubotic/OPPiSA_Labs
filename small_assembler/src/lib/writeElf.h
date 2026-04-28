@@ -2,18 +2,15 @@
 #define __WINELF_H__
 
 #include <stdarg.h>
-#include <io.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <wtypes.h>
 #include <fcntl.h>
 #include <libelf.h> 
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <sysexits.h>
-#include <vis.h>
-#include <sys\elf_common.h>
+//#include <sys/elf_common.h>
 
 // Definition of the default string table section ".shstrtab"
 
