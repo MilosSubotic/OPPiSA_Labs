@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
+'''
+@author: Milos Subotic <milos.subotic.sm@gmail.com>
+@license: MIT
+'''
+
+###############################################################################
+
+# Import needed function for standard library.
+from os.path import basename, splitext
+
+###############################################################################
+
+# Installing dependencies like libraries and tools.
+def prerequisites(ctx):
+	pass # Not using.
+
+# Options for waf script.
+def options(opt):
+	opt.load('gcc gxx') # Choose compiler.
+
+# Configuration of build system: setting compiler flags, searching libraries.
+def configure(cfg):
+	cfg.load('gcc gxx') # Choose compiler.
+
+	# C/C++ flags.
+	cfg.env.append_value('CFLAGS', '-std=c99')
+	cfg.env.append_value('CXXFLAGS', '-std=c++11')
+	cfg.env.append_value('CXXFLAGS', '-fopenmp')
+	cfg.env.append_value('LDFLAGS', '-fopenmp')
+
+# Building source files: compiling and linking.
+def build(bld):
+	bld.program(
+		target = 'assembler',
+		includes = ['src/', 'src/lib/'],
+		source = bld.srcnode.ant_glob('src/*.cpp') 
+			+ bld.srcnode.ant_glob('src/lib/*.cpp')
+	)
+			
+###############################################################################
