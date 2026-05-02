@@ -25,7 +25,7 @@ def configure(cfg):
 	cfg.load('gcc gxx') # Choose compiler.
 
 	# C/C++ flags.
-	cfg.env.append_value('CXXFLAGS', '-std=c++11')
+	cfg.env.append_value('CXXFLAGS', '-std=c++17')
 	cfg.env['CXXFLAGS'] += '-O0 -g'.split() # For debugging
 
 # Building source files: compiling and linking.

@@ -6,11 +6,15 @@
 #include <iostream>
 #include <vector>
 
+#define DEBUG(var) \
+	do{ \
+		std::cout << #var << " = " << var << std::endl; \
+	}while(0)
+
 class InputStream
 {
 public:
-	InputStream(std::ifstream& inStream);
-	InputStream(const std::string& inStream);
+	InputStream(const std::string& fileName);
 
 	char getNextChar();
 	void pushBackChar();

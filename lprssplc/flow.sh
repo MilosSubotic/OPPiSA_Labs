@@ -10,4 +10,4 @@ sudo ./waf prerequisites
 ./waf configure
 
 # On every code change build and execute example.
-./waf build && ./build/lprssplc test/test/program.txt
+./waf build && ./build/lprssplc test/program.txt

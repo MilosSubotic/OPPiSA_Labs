@@ -30,8 +30,7 @@ int main(int argc, char* argv[])
 	}
 	string inputFileName(argv[1]);
 	ifstream inputFile(inputFileName);
-	InputStream is(inputFile);
-	inputFile.close();
+	InputStream is(inputFileName);
 
 	// Syntax analysis: Lexer and Parser
 	Parser pars(is);

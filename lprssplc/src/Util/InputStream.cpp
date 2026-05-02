@@ -1,24 +1,18 @@
 #include "InputStream.hpp"
 
+#include <filesystem>
+
 using namespace std;
 
 
-InputStream::InputStream(ifstream& inStream)
+InputStream::InputStream(const std::string& fileName)
 {
-	inStream.seekg(0, inStream.end);
-	std::size_t length = static_cast<std::size_t>(inStream.tellg());
-	inStream.seekg(0, inStream.beg);
+	size_t length = filesystem::file_size(fileName);
 	m_streamBuffer.resize(length);
-	inStream.read(&m_streamBuffer.front(), length);
+	ifstream inputFile(fileName);
+	inputFile.read(&m_streamBuffer.front(), length);
 }
 
-
-InputStream::InputStream(const std::string& inStream)
-{
-	m_streamPosition = 0;
-	m_streamBuffer.resize(inStream.length());
-	copy(inStream.begin(), inStream.end(), m_streamBuffer.begin());
-}
 
 
 char InputStream::getNextChar()
