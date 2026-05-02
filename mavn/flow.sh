@@ -9,6 +9,9 @@ sudo ./waf prerequisites
 # Just first time after download/unpacking.
 ./waf configure
 
-# On every code change build and execute example.
-./waf build && ./build/small_assembler
+# On every code change do build.
+./waf build
+
+# On every change of mavn file or build run program
+./build/mavn test/simple.mavn
 
