@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+
+'''
+@author: Milos Subotic <milos.subotic.sm@gmail.com>
+@license: MIT
+'''
+
+###############################################################################
+
+import glob
+
+###############################################################################
+
+# Installing dependencies like libraries and tools.
+def prerequisites(ctx):
+	pass # Not using.
+
+# Options for waf script.
+def options(opt):
+	opt.load('gcc gxx') # Choose compiler.
+
+# Configuration of build system: setting compiler flags, searching libraries.
+def configure(cfg):
+	cfg.load('gcc gxx') # Choose compiler.
+
+	# C/C++ flags.
+	cfg.env.append_value('CXXFLAGS', '-std=c++11')
+	cfg.env['CXXFLAGS'] += '-O0 -g'.split() # For debugging
+
+# Building source files: compiling and linking.
+def build(bld):
+	bld.program(
+		target = 'lprssplc',
+		includes = glob.glob(
+			'src/**/',
+			recursive = True
+		),
+		source = glob.glob(
+			'src/**/*.cpp',
+			recursive = True
+		)
+	)
+			
+###############################################################################
